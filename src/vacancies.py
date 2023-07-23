@@ -2,6 +2,8 @@
 from abc import ABC, abstractmethod
 import requests
 import json
+import pandas as pd
+import csv
 
 class AbstractAPI(ABC):
     pass
@@ -25,7 +27,8 @@ class Vacancies():
         self.currency = self.response["items"]["salary"]["from"]
         self.url = f'https://hh.ru/vacancy/{self.id}'
 
-        """Что значит валидировать данные, которыми инициализируются его атрибуты?"""
+        """Что значит валидировать данные, которыми инициализируются его атрибуты?
+        Как понять какие атрибуты должныбыть приватными?"""
 
     def compare_salaries(self):
         """ Как конкретно нужно сравнивать зарплаты? Магические методы надо испрльзовать __lt__, __gt__ и тд?
@@ -59,14 +62,35 @@ class VacanciesToJsonFile(Vacancies, AbstractVacanciesToFile):
         """Нужно ли добавлять тут информацию снова или как-то унаследовать от класса родилтеля?"""
         super().__init__()
 
-    def add_vacancy_to_file(self):
+    def add_vacancy_to_json_file(self):
         with open("vacancies.json", "w", encoding='utf-8') as file:
             json.dump(self.response.json(), file, ensure_ascii=False)
 
 class VacanciesToCsvFile(Vacancies, AbstractVacanciesToFile):
 
+    def __init__(self):
+        """Нужно ли добавлять тут информацию снова или как-то унаследовать от класса родилтеля?"""
+        super().__init__()
+
+    def add_vacancy_to_csv_file(self):
+        with open('vacancies.csv', mode="w", encoding='utf-8') as file:
+            names = ["id", "name", "date_of_publication", "salary_from", "currency", "url"]
+            file_writer = csv.DictWriter(file, delimiter=",", lineterminator="\r", fieldnames=names)
+            file_writer.writeheader()
+            for i in self.response["items"]:
+                file_writer.writerow(i)
 
 
+
+class VacanciesToTxtFile(Vacancies, AbstractVacanciesToFile):
+
+    def __init__(self):
+        """Нужно ли добавлять тут информацию снова или как-то унаследовать от класса родилтеля?"""
+        super().__init__()
+
+    def add_vacancy_to_txt_file(self):
+        with open("vacancies.txt", "w", encoding='utf-8') as file:
+            json.loads(self.response.text)
 
 
 
