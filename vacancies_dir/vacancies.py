@@ -154,6 +154,7 @@ class VacanciesToTxtFile(HeadHunterAPI, AbstractVacanciesToFile):
             json.dump(HeadHunterAPI.get_vacancies(hh_api), file, ensure_ascii=False)
 
     def get_vacancies_from_file(self):
+
         """Получает список всех вакансий(словари) из txt-файла"""
         with open("vacancies_dir.txt", "r", encoding='utf-8') as file:
             return file.readline()

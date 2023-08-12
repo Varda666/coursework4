@@ -1,5 +1,4 @@
 from vacancies_dir import vacancies
-import datetime
 
 
 def get_employee_request():
@@ -30,6 +29,7 @@ def print_vacs_for_employee(list_vacs):
               )
     except TypeError:
         pass
+
 
 
 class EmployeeRequest:

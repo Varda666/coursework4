@@ -3,6 +3,7 @@ from employee_req import employee_request
 if __name__ == '__main__':
 
     print("Добрый день")
+
     empl_request = employee_request.EmployeeRequest(employee_request.get_employee_request())
     employee_request.EmployeeRequest.get_vacancies_info(empl_request)
     list_vacs = employee_request.EmployeeRequest.get_vacancies_info_by_name(empl_request)
