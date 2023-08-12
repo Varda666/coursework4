@@ -1,4 +1,6 @@
-import vacancies
+from vacancies_dir import vacancies
+import datetime
+
 
 def get_employee_request():
     """Получает данные для запроса от пользователя"""
@@ -18,6 +20,18 @@ def get_employee_request():
         print('Сайт поиска информации указан неверно')
     return emp_website, emp_name, emp_area, emp_salary
 
+
+def print_vacs_for_employee(list_vacs):
+    try:
+        for vac in list_vacs:
+            print(f"""Вакансия {vac["name"]} в регионе {vac["area"]} с заработной платой от {vac["salary_from"]} руб., 
+ссылка: {vac["url"]}
+опубликована: {vac["date_of_publication"][:10]}"""
+              )
+    except TypeError:
+        pass
+
+
 class EmployeeRequest:
 
     def __init__(self, get_employee_request):
@@ -25,6 +39,8 @@ class EmployeeRequest:
         self.emp_name = get_employee_request[1]
         self.emp_area = get_employee_request[2]
         self.emp_salary = get_employee_request[3]
+
+
 
     def get_vacancies_info(self):
         """Выводит список всех вакансий с сайта СД или ХХ"""
@@ -55,44 +71,41 @@ class EmployeeRequest:
         vacs = self.get_vacancies_info()
         for vac in vacs:
             if self.emp_name in vac["name"]:
-                # if self.emp_salary >= vac["salary_from"]:
-                suitable_vacancies_list.append(vac)
+                if int(self.emp_salary) <= int(vac["salary_from"]):
+                    suitable_vacancies_list.append(vac)
             else:
                     pass
         if len(suitable_vacancies_list) == 0:
             print('Нет вакансий с такой зарплатой')
         else:
-            print(suitable_vacancies_list)
+            return suitable_vacancies_list
 
     def get_vacancies_info_by_salary(self):
         """Выводит список вакансии с определенным уровнем зп """
         suitable_vacancies_list = []
         vacs = self.get_vacancies_info()
         for vac in vacs:
-            if self.emp_salary >= vac["salary_from"]:
+            if int(self.emp_salary) <= int(vac["salary_from"]):
                 suitable_vacancies_list.append(vac)
             else:
                 pass
         if len(suitable_vacancies_list) == 0:
             print('Нет вакансий с такой зарплатой')
         else:
-            print(suitable_vacancies_list)
-
+            return suitable_vacancies_list
 
     def get_top_n_vacancies_info_by_salary(self, top_n: int):
         """Выводит список вакансии с само большой зп"""
         try:
-          list_top_n_vacancies_info_by_salary = sorted(self.get_vacancies_info(), key=lambda d: d["salary_from"])
-          print(list_top_n_vacancies_info_by_salary[:top_n])
+            list_top_n_vacancies_info_by_salary = sorted(self.get_vacancies_info(), key=lambda d: d["salary_from"])
+            return list_top_n_vacancies_info_by_salary[:top_n]
         except FileNotFoundError:
-          print('Введено не целое число')
-
+            print('Введено не целое число')
 
     def get_sorted_vacancies_info_by_date_of_publication(self):
         """Сортирует вакансии по дате публикаци и выводит список"""
         list_vacancies_info_by_date_of_publication = sorted(self.get_vacancies_info(), key=lambda d: d["date_of_publication"])
-        print(list_vacancies_info_by_date_of_publication)
-
+        return list_vacancies_info_by_date_of_publication
 
     def get_vacancies_info_by_area(self):
         """Выводит список вакансий в определенном городе"""
@@ -106,8 +119,7 @@ class EmployeeRequest:
         if len(list_vacancies_info_by_area) == 0:
             print('Нет вакансий в данном регионе')
         else:
-            print(list_vacancies_info_by_area)
-
+            return list_vacancies_info_by_area
 
     def get_vacancies_info_by_keyword(self, keyword):
         """Выводит список вакансий по ключевому слову"""
@@ -121,9 +133,7 @@ class EmployeeRequest:
         if len(list_vacancies_info_by_keyword) == 0:
             print('Вакансии по ключевому слову не найдены')
         else:
-            print(list_vacancies_info_by_keyword)
-
-
+            return list_vacancies_info_by_keyword
 
 
 
